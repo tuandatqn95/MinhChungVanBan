@@ -20,6 +20,7 @@ public class MinhChungDAO {
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
 			MinhChung mc = new MinhChung();
+			mc.setID(rs.getInt("ID"));
 			mc.setMaMinhChung(rs.getString("MaMC"));
 			mc.setTenMinhChung(rs.getString("TenMC"));
 			mc.setIDTieuChi(rs.getInt("IDTieuChi"));
@@ -31,6 +32,28 @@ public class MinhChungDAO {
 		}
 
 		return list;
+	}
+
+	public MinhChung getMinhChungByID(int id) throws SQLException {
+		Connection conn = DBConnect.getConnection();
+		String sql = "SELECT * FROM minhchung WHERE ID = ?";
+		PreparedStatement ps = conn.prepareCall(sql);
+		ps.setInt(1, id);
+		MinhChung mc = null;
+		ResultSet rs = ps.executeQuery();
+		if (rs.next()) {
+			mc = new MinhChung();
+			mc.setID(rs.getInt("ID"));
+			mc.setMaMinhChung(rs.getString("MaMC"));
+			mc.setTenMinhChung(rs.getString("TenMC"));
+			mc.setIDTieuChi(rs.getInt("IDTieuChi"));
+			mc.setMoTa(rs.getString("MoTa"));
+			mc.setSoHieu(rs.getString("SoHieu"));
+			mc.setNoiBanHanh(rs.getInt("IDNBH"));
+
+		}
+
+		return mc;
 	}
 
 	public void ThemMinhChung(int idTieuChi, String maMinhChung, String tenMinhChung, String moTa, String soHieu,
@@ -53,7 +76,7 @@ public class MinhChungDAO {
 	public void SuaMinhChung(int id, int idTieuChi, String maMinhChung, String tenMinhChung, String moTa, String soHieu,
 			String ngayBanHanh, int idNoiBanHanh) throws SQLException {
 		Connection conn = DBConnect.getConnection();
-		String sql = "UPDATE minhchung SET IDTieuChi=?,MaMC=?,TenMC=?,MoTa=?,SoHieu=?,NgayBanHanh=STR_TO_DATE(?, '%d-%m-%Y'),IDNBH=?) WHERE ID = ?";
+		String sql = "UPDATE minhchung SET IDTieuChi=?,MaMC=?,TenMC=?,MoTa=?,SoHieu=?,NgayBanHanh=STR_TO_DATE(?, '%d-%m-%Y'),IDNBH=? WHERE ID = ?";
 		PreparedStatement ps;
 		ps = conn.prepareCall(sql);
 		ps.setInt(1, idTieuChi);
@@ -66,6 +89,20 @@ public class MinhChungDAO {
 		ps.setInt(8, id);
 		ps.executeUpdate();
 		conn.close();
+	}
+
+	public int GetIDMinhChungByMaMinhChung(String maMinhChung) throws SQLException {
+		Connection conn = DBConnect.getConnection();
+		String sql = "SELECT * FROM minhchung WHERE MaMC = ?";
+		PreparedStatement ps = conn.prepareCall(sql);
+
+		ps.setString(1, maMinhChung);
+
+		ResultSet rs = ps.executeQuery();
+		if (rs.next()) {
+			return rs.getInt("ID");
+		}
+		return -1;
 	}
 
 }

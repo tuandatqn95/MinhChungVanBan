@@ -166,7 +166,6 @@ public class TaiKhoanServlet extends HttpServlet {
 								
 							}
 							String fileImg = dirUrl + File.separator + nameimg;
-							System.out.println(fileImg);
 							File file = new File(fileImg);
 							try {
 								avatarFile.write(file);

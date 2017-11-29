@@ -85,8 +85,10 @@
 										<td><%=minhChung.getTenMinhChung()%></td>
 										<td><%=minhChung.getIDTieuChi()%></td>
 										<td><%=minhChung.getIDTieuChi()%></td>
-										<td class="text-center"><a href="#">Sửa</a></td>
-										<td class="text-center"><a href="#">Xóa</a></td>
+										<td class="text-center"><a
+											href="MinhChungServlet?command=edit&id=<%=minhChung.getID()%>">Sửa</a></td>
+										<td class="text-center"><a
+											href="MinhChungServlet?command=delete&id=<%=minhChung.getID()%>">Xóa</a></td>
 									</tr>
 									<%
 										}

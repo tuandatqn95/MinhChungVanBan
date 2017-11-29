@@ -1,3 +1,8 @@
+<%@page import="model.TapTin"%>
+<%@page import="dao.TapTinDAO"%>
+<%@page import="model.TieuChi"%>
+<%@page import="dao.MinhChungDAO"%>
+<%@page import="model.MinhChung"%>
 <%@page import="dao.BoTieuChuanDAO"%>
 <%@page import="model.BoTieuChuan"%>
 <%@page import="java.util.ArrayList"%>
@@ -109,6 +114,18 @@
 	TieuChiDAO tieuChiDAO = new TieuChiDAO();
 	NoiBanHanhDAO noiBanHanhDAO = new NoiBanHanhDAO();
 	BoTieuChuanDAO boTieuChuanDAO = new BoTieuChuanDAO();
+	MinhChungDAO minhChungDAO = new MinhChungDAO();
+	TapTinDAO tapTinDAO = new TapTinDAO();
+
+	int idMinhChung;
+	MinhChung minhChung = null;
+	if (request.getParameter("id") != null) {
+		idMinhChung = Integer.parseInt(request.getParameter("id"));
+		minhChung = minhChungDAO.getMinhChungByID(idMinhChung);
+	}
+	if (minhChung == null) {
+		request.getRequestDispatcher("404.jsp").forward(request, response);
+	}
 %>
 <body>
 
@@ -151,7 +168,7 @@
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="panel panel-default">
-						<div class="panel-heading">Thêm minh chứng</div>
+						<div class="panel-heading">Sửa minh chứng</div>
 						<div class="panel-body">
 							<div class="row">
 								<form role="form" action="MinhChungServlet" method="post"
@@ -159,19 +176,23 @@
 									<div class="col-lg-6">
 										<div class="form-group">
 											<label>Mã minh chứng</label> <input type="text"
-												class="form-control" name="MaMinhChung">
+												class="form-control" name="MaMinhChung"
+												value="<%=minhChung.getMaMinhChung()%>">
 										</div>
 										<div class="form-group">
 											<label>Tên minh chứng</label> <input type="text"
-												class="form-control" name="TenMinhChung">
+												class="form-control" name="TenMinhChung"
+												value="<%=minhChung.getTenMinhChung()%>">
 										</div>
 										<div class="form-group">
 											<label>Mô tả (không bắt buộc)</label>
-											<textarea class="form-control" name="MoTa" rows="3"></textarea>
+											<textarea class="form-control" name="MoTa" rows="3"
+												value="<%=minhChung.getMoTa()%>"></textarea>
 										</div>
 										<div class="form-group">
 											<label>Số hiệu</label> <input type="text"
-												class="form-control" name="SoHieu">
+												class="form-control" name="SoHieu"
+												value="<%=minhChung.getSoHieu()%>">
 										</div>
 										<div class="form-group">
 											<label>Chọn bộ tiêu chuẩn</label> <select id="BoTieuChuan"
@@ -179,9 +200,14 @@
 												<option selected disabled hidden="hidden"
 													style="display: none" value=""></option>
 												<%
-													for (BoTieuChuan boTieuChuan : boTieuChuanDAO.getListBoTieuChuan()) {
-														out.println("<option value=\"" + boTieuChuan.getID() + "\">" + boTieuChuan.getTenBoTieuChuan()
-																+ "</option>");
+													int idBoTieuChuan = tieuChuanDAO
+															.GetTieuChuanByID(tieuChiDAO.GetTieuChiByID(minhChung.getIDTieuChi()).getIDTieuChuan())
+															.getIDBoTieuChuan();
+													for (BoTieuChuan btc : boTieuChuanDAO.getListBoTieuChuan()) {
+												%>
+												<option value="<%=btc.getID()%>"
+													<%=btc.getID() == idBoTieuChuan ? "selected" : ""%>><%=btc.getTenBoTieuChuan()%>	</option>
+												<%
 													}
 												%>
 											</select>
@@ -189,14 +215,32 @@
 										<div class="form-group">
 											<label>Chọn tiêu chuẩn</label> <select id="TieuChuan"
 												name="IDTieuChuan" class="form-control">
+												<%
+													int idTieuChuan = tieuChiDAO.GetTieuChiByID(minhChung.getIDTieuChi()).getIDTieuChuan();
+													for (TieuChuan tc : tieuChuanDAO.getListTieuChuanByBoTieuChuan(idBoTieuChuan)) {
+												%>
+												<option value="<%=tc.getID()%>"
+													<%=tc.getID() == idTieuChuan ? "selected" : ""%>><%=tc.getTenTieuChuan()%>	</option>
 
+												<%
+													}
+												%>
 
 											</select>
 										</div>
 										<div class="form-group">
 											<label>Chọn tiêu chí</label> <select id="TieuChi"
 												name="IDTieuChi" class="form-control">
+												<%
+													int idTieuChi = minhChung.getIDTieuChi();
+													for (TieuChi tc : tieuChiDAO.getListTieuChiByTieuChuan(idTieuChuan)) {
+												%>
+												<option value="<%=tc.getID()%>"
+													<%=tc.getID() == idTieuChi ? "selected" : ""%>><%=tc.getTenTieuChi()%>	</option>
 
+												<%
+													}
+												%>
 											</select>
 
 										</div>
@@ -220,12 +264,12 @@
 													class="glyphicon glyphicon-calendar"></i></span>
 											</div>
 										</div>
-
-										<input type="hidden" name="Func" value="add" />
-										<button type="submit" class="btn btn-primary">Submit
-											Button</button>
-										<button type="reset" class="btn btn-default">Reset
-											Button</button>
+										<input type="hidden" name="IDMinhChung"
+											value="<%=minhChung.getID()%>" /> <input type="hidden"
+											name="Func" value="edit" />
+										<button type="submit" class="btn btn-primary">Lưu
+											thay đổi</button>
+										<a href="minhchung.jsp" class="btn btn-default">Hủy</a>
 
 									</div>
 									<!-- /.col-lg-6 (nested) -->
@@ -242,12 +286,25 @@
 									<div id="attachment" class="col-lg-6">
 
 										<h3>Thêm tập đính kèm</h3>
+										<%
+											for (TapTin tt : tapTinDAO.GetListTapTinByMinhChung(minhChung.getID())) {
+										%>
+										<div class="alert alert-info">
+											<a href="TapTinServlet?command=delete&id=<%=tt.getID()%>"
+												class="close" aria-label="close">&times;</a> <a
+												href="../documents/<%=tt.getFilePath()%>"><strong><%=tt.getFilePath()%></strong></a>
+
+										</div>
+										<%
+											}
+										%>
+
 										<div class="form-group">
 											<a class="btn btn-info" id="add-attachment"
 												onclick="addAttach()">Thêm tập tin</a>
 										</div>
 										<div class="form-group">
-											<input type="file">
+											<input type="file" name="attach0">
 										</div>
 										<!--<div class="alert alert-info">
 											<a href="#" class="close" data-dismiss="alert"
