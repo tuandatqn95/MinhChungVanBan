@@ -3,17 +3,17 @@
 <%@ include file="header.jsp"%>
 
 <%
-	Cookie loginCookie = null;
 	for (Cookie cookie : request.getCookies()) {
-		if (cookie.getName().equals("loginUser")) {
-			loginCookie = cookie;
-			break;
+		if (cookie.getName().equals("passUser")){
+			cookie.setMaxAge(0);
+			response.addCookie(cookie);
+		}
+		if (cookie.getName().equals("loginUser")){
+			cookie.setMaxAge(0);
+			response.addCookie(cookie);
 		}
 	}
-	if (loginCookie != null) {
-		loginCookie.setMaxAge(0);
-		response.addCookie(loginCookie);
-	}
+
 	response.sendRedirect("index.jsp");
 %>
 

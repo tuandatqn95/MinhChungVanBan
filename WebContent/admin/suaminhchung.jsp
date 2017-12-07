@@ -11,6 +11,7 @@
 <%@page import="model.TieuChuan"%>
 <%@page import="dao.TieuChiDAO"%>
 <%@page import="dao.TieuChuanDAO"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -134,7 +135,7 @@
 			$("#datepicker").datepicker({
 				autoclose : true,
 				todayHighlight : true
-			}).datepicker('update', new Date());
+			});
 		});
 	</script>
 	<div id="wrapper">
@@ -186,8 +187,7 @@
 										</div>
 										<div class="form-group">
 											<label>Mô tả (không bắt buộc)</label>
-											<textarea class="form-control" name="MoTa" rows="3"
-												value="<%=minhChung.getMoTa()%>"></textarea>
+											<textarea class="form-control" name="MoTa" rows="3"><%=minhChung.getMoTa()%></textarea>
 										</div>
 										<div class="form-group">
 											<label>Số hiệu</label> <input type="text"
@@ -195,6 +195,32 @@
 												value="<%=minhChung.getSoHieu()%>">
 										</div>
 										<div class="form-group">
+											<label>Ngày ban hành</label>
+											<div id="datepicker" class="input-group date"
+												data-date-format="dd-mm-yyyy">
+												<input class="form-control" name="NgayBanHanh" type="text" value=<%=new SimpleDateFormat("dd-MM-yyyy").format(minhChung.getNgayBanhanh())%>>
+												<span class="input-group-addon"><i
+													class="glyphicon glyphicon-calendar"></i></span>
+											</div>
+										</div>
+
+									</div>
+									<!-- /.col-lg-6 (nested) -->
+									<%
+											TapTin tt = tapTinDAO.GetTapTinByMinhChung(minhChung.getID());
+									%>
+									<script>
+										function XoaTapTin(){
+								            if(confirm("Bạn có muốn xóa tệp tin đính kèm của minh chứng?") == true){
+								            	$("div.taptin").remove();
+								            	$("#attachment").html('<div class="form-group"><input type="file" name="attach" accept=".PDF"></div>');
+								            	window.location="TapTinServlet?command=delete&id=<%=tt.getID()%>";
+								            }
+								        }
+									</script>
+									
+									<div class="col-lg-6">
+									<div class="form-group">
 											<label>Chọn bộ tiêu chuẩn</label> <select id="BoTieuChuan"
 												name="IDBoTieuChuan" class="form-control">
 												<option selected disabled hidden="hidden"
@@ -255,65 +281,31 @@
 												%>
 											</select>
 										</div>
-										<div class="form-group">
-											<label>Ngày ban hành</label>
-											<div id="datepicker" class="input-group date"
-												data-date-format="dd-mm-yyyy">
-												<input class="form-control" name="NgayBanHanh" type="text">
-												<span class="input-group-addon"><i
-													class="glyphicon glyphicon-calendar"></i></span>
-											</div>
+										
+									<div class="form-group">	
+									<label>Tập tin đính kèm</label>
+									<%if(tt.getFilePath() != null) {%>
+									<div id="attachment">
+										<div class="alert alert-info taptin col-md-10">
+												<a href="../documents/<%=tt.getFilePath()%>"><strong><%=tt.getFilePath()%></strong></a>
 										</div>
-										<input type="hidden" name="IDMinhChung"
-											value="<%=minhChung.getID()%>" /> <input type="hidden"
-											name="Func" value="edit" />
-										<button type="submit" class="btn btn-primary">Lưu
-											thay đổi</button>
-										<a href="minhchung.jsp" class="btn btn-default">Hủy</a>
-
+										<button type="button" class="btn btn-danger glyphicon glyphicon-trash col-md-offset-1 col-md-1" style="height:52px" onclick="XoaTapTin()"></button>
+									</div>
+									
+									<%} else {%>
+										<div class="form-group">
+											<input type="file" name="attach" accept=".PDF">
+										</div>
+									<%}%>
+									</div>
 									</div>
 									<!-- /.col-lg-6 (nested) -->
-									<script>
-										var index = 1;
-										function addAttach() {
-											var str = $("#attachment").html();
-											$("#attachment")
-													.html(
-															str
-																	+ '<div class="form-group"><input type="file" name="attach'+ index++ +'"></div>');
-										}
-									</script>
-									<div id="attachment" class="col-lg-6">
-
-										<h3>Thêm tập đính kèm</h3>
-										<%
-											for (TapTin tt : tapTinDAO.GetListTapTinByMinhChung(minhChung.getID())) {
-										%>
-										<div class="alert alert-info">
-											<a href="TapTinServlet?command=delete&id=<%=tt.getID()%>"
-												class="close" aria-label="close">&times;</a> <a
-												href="../documents/<%=tt.getFilePath()%>"><strong><%=tt.getFilePath()%></strong></a>
-
-										</div>
-										<%
-											}
-										%>
-
-										<div class="form-group">
-											<a class="btn btn-info" id="add-attachment"
-												onclick="addAttach()">Thêm tập tin</a>
-										</div>
-										<div class="form-group">
-											<input type="file" name="attach0">
-										</div>
-										<!--<div class="alert alert-info">
-											<a href="#" class="close" data-dismiss="alert"
-												aria-label="close">&times;</a> <strong>hinhanh1.jsp</strong>
-											(69K)
-										</div>-->
-
-									</div>
-									<!-- /.col-lg-6 (nested) -->
+									<div class="clearfix"></div>
+									<br>
+									<input type="hidden" name="IDMinhChung" value="<%=minhChung.getID()%>" />
+										<input type="hidden" name="Func" value="edit" />
+										<div class="col-lg-6"><a href="minhchung.jsp" class="btn btn-danger col-lg-12">Hủy</a></div>
+										<div class="col-lg-6"><button type="submit" class="btn btn-primary col-lg-12">Lưu thay đổi</button></div>	
 								</form>
 							</div>
 							<!-- /.row (nested) -->

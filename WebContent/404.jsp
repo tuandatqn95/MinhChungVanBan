@@ -4,7 +4,8 @@
 <%@ include file="header.jsp"%>
 
 
-<div class="alert alert-danger">Không tìm thấy trang này!</div>
+<div class="alert alert-danger" style="text-align: center;">Không tìm thấy trang này!</div>
+
 <%@ include file="sidebar.jsp"%>
 <%@ include file="footer.jsp"%>
 

@@ -13,7 +13,7 @@ header {
 }
 
 .sidebar-list .media{
-	padding-bottom: 1.1em;
+	padding-bottom: 1em;
 	border-bottom: 1px solid #e8e8e8;
 }
 
@@ -109,4 +109,13 @@ footer .school{
 .function-heading{
 	font-size:25px;
 	vertical-align: middle;
+}
+
+.carousel-inner > .item > img {
+	width:750px;
+	height:400px;
+}
+
+.media:last-child {
+	border-bottom: 0;
 }

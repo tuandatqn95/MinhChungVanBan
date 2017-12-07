@@ -6,6 +6,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<%@include file="header.jsp"%>
+<%if (taikhoan.getIDLoaiTK() < 3) request.getRequestDispatcher("403.jsp").forward(request, response);%>
+
 <head>
 
 <meta charset="utf-8">
@@ -99,8 +102,6 @@
 
 	<div id="wrapper">
 
-		<%@include file="header.jsp"%>
-
 		<div id="page-wrapper">
 			<div class="row">
 				<div class="col-lg-12">
@@ -157,7 +158,7 @@
 													value="<%=thongBao.getID()%>" /> <input type="hidden"
 													name="Func" value="edit" />
 												<button type="submit" class="btn btn-primary"
-													onclick="bindNoiDungThongBao()">Đăng thông báo</button>
+													onclick="bindNoiDungThongBao()">Cập nhật</button>
 												<a href="thongbao.jsp" class="btn btn-default">Hủy</a>
 
 											</div>

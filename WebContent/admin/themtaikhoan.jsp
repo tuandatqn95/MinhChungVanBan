@@ -6,6 +6,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<%@include file="header.jsp"%>
+<%if (taikhoan.getIDLoaiTK() < 3) request.getRequestDispatcher("403.jsp").forward(request, response);%>
+
 <head>
 
 <meta charset="utf-8">
@@ -31,6 +34,9 @@
 <!-- Custom Fonts -->
 <link href="vendor/font-awesome/css/font-awesome.min.css"
 	rel="stylesheet" type="text/css">
+	
+<script src="js/jquery.min.js"></script>
+<link rel="stylesheet prefetch" href="css/datepicker.css">
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -41,11 +47,24 @@
 
 </head>
 
+<style>
+#datepicker>span:hover {
+	cursor: pointer;
+}
+</style>
+
+<script type="text/javascript">
+		$(document).ready(function() {
+			$("#datepicker").datepicker({
+				autoclose : true,
+				todayHighlight : true
+			}).datepicker('update', new Date());
+		});
+</script>
+
 <body>
 
 	<div id="wrapper">
-
-		<%@include file="header.jsp"%>
 
 		<div id="page-wrapper">
 			<div class="row">
@@ -148,7 +167,7 @@
 											<label class="control-label col-sm-2" for="HoTen">Nơi
 												công tác:</label>
 											<div class="col-sm-10">
-												<input type="text" class="form-control" name="HoTen"
+												<input type="text" class="form-control" name="NoiCongTac"
 													placeholder="Nơi công tác...">
 											</div>
 										</div>
@@ -188,7 +207,7 @@
 											<label class="control-label col-sm-2" for="Avatar">Ảnh
 												đại diện:</label>
 											<div class="col-sm-10">
-												<input type="file" name="Avatar">
+												<input type="file" name="Avatar" accept="image/*">
 											</div>
 										</div>
 										<div class="form-group">
@@ -234,6 +253,7 @@
 
 	<!-- Custom Theme JavaScript -->
 	<script src="dist/js/sb-admin-2.js"></script>
+	<script src="js/bootstrap-datepicker.js"></script>
 
 </body>
 

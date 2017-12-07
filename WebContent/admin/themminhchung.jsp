@@ -47,6 +47,7 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    
 <style>
 #datepicker>span:hover {
 	cursor: pointer;
@@ -174,6 +175,21 @@
 												class="form-control" name="SoHieu">
 										</div>
 										<div class="form-group">
+											<label>Ngày ban hành</label>
+											<div id="datepicker" class="input-group date"
+												data-date-format="dd-mm-yyyy">
+												<input class="form-control" name="NgayBanHanh" type="text">
+												<span class="input-group-addon"><i
+													class="glyphicon glyphicon-calendar"></i></span>
+											</div>
+										</div>
+										
+									</div>
+									<!-- /.col-lg-6 (nested) -->
+									
+									<div class="col-lg-6">
+																				
+										<div class="form-group">
 											<label>Chọn bộ tiêu chuẩn</label> <select id="BoTieuChuan"
 												name="IDBoTieuChuan" class="form-control">
 												<option selected disabled hidden="hidden"
@@ -212,51 +228,17 @@
 											</select>
 										</div>
 										<div class="form-group">
-											<label>Ngày ban hành</label>
-											<div id="datepicker" class="input-group date"
-												data-date-format="dd-mm-yyyy">
-												<input class="form-control" name="NgayBanHanh" type="text">
-												<span class="input-group-addon"><i
-													class="glyphicon glyphicon-calendar"></i></span>
-											</div>
+										<label>Thêm tập đính kèm</label>
+											<input type="file" accept=".PDF">
 										</div>
-
-										<input type="hidden" name="Func" value="add" />
-										<button type="submit" class="btn btn-primary">Submit
-											Button</button>
-										<button type="reset" class="btn btn-default">Reset
-											Button</button>
-
+										
 									</div>
 									<!-- /.col-lg-6 (nested) -->
-									<script>
-										var index = 1;
-										function addAttach() {
-											var str = $("#attachment").html();
-											$("#attachment")
-													.html(
-															str
-																	+ '<div class="form-group"><input type="file" name="attach'+ index++ +'"></div>');
-										}
-									</script>
-									<div id="attachment" class="col-lg-6">
-
-										<h3>Thêm tập đính kèm</h3>
-										<div class="form-group">
-											<a class="btn btn-info" id="add-attachment"
-												onclick="addAttach()">Thêm tập tin</a>
-										</div>
-										<div class="form-group">
-											<input type="file">
-										</div>
-										<!--<div class="alert alert-info">
-											<a href="#" class="close" data-dismiss="alert"
-												aria-label="close">&times;</a> <strong>hinhanh1.jsp</strong>
-											(69K)
-										</div>-->
-
-									</div>
-									<!-- /.col-lg-6 (nested) -->
+									<div class="clearfix"></div>
+									<br>
+										<input type="hidden" name="Func" value="add"/>
+										<div class="col-lg-6"><button type="reset" class="btn btn-danger col-lg-12">Nhập lại</button></div>
+										<div class="col-lg-6"><button type="submit" class="btn btn-primary col-lg-12">Đăng tải</button></div>	
 								</form>
 							</div>
 							<!-- /.row (nested) -->

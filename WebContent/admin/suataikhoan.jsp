@@ -11,6 +11,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<%@include file="header.jsp"%>
+<%if (taikhoan.getIDLoaiTK() < 3) request.getRequestDispatcher("403.jsp").forward(request, response);%>
+
 <head>
 
 <meta charset="utf-8">
@@ -36,6 +39,9 @@
 <!-- Custom Fonts -->
 <link href="vendor/font-awesome/css/font-awesome.min.css"
 	rel="stylesheet" type="text/css">
+	
+<script src="js/jquery.min.js"></script>
+<link rel="stylesheet prefetch" href="css/datepicker.css">
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -45,9 +51,28 @@
     <![endif]-->
 
 </head>
-<%
-	TaiKhoanDAO taiKhoanDAO = new TaiKhoanDAO();
 
+<style>
+#datepicker>span:hover {
+	cursor: pointer;
+}
+</style>
+
+<script type="text/javascript">
+		$(document).ready(function() {
+			$("#datepicker").datepicker({
+				autoclose : true,
+				todayHighlight : true
+			});
+		});
+</script>
+	
+	
+<body>
+
+	<div id="wrapper">
+
+<%
 	int idTaiKhoan;
 	TaiKhoan taiKhoan = null;
 	if (request.getParameter("id") != null) {
@@ -58,12 +83,6 @@
 		request.getRequestDispatcher("404.jsp").forward(request, response);
 	}
 %>
-<body>
-
-	<div id="wrapper">
-
-		<%@include file="header.jsp"%>
-
 		<div id="page-wrapper">
 			<div class="row">
 				<div class="col-lg-12">
@@ -91,7 +110,7 @@
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="panel panel-default">
-						<div class="panel-heading">Thêm tài khoản</div>
+						<div class="panel-heading">Cập nhật thông tin tài khoản</div>
 						<div class="panel-body">
 							<div class="row">
 								<div class="col-lg-12">
@@ -198,7 +217,7 @@
 											<label class="control-label col-sm-2" for="Avatar">Ảnh
 												đại diện:</label>
 											<div class="col-sm-10">
-												<input type="file" name="Avatar">
+												<input type="file" name="Avatar" accept="image/*">
 											</div>
 										</div>
 										<%
@@ -221,8 +240,8 @@
 												<input type="hidden" name="MatKhau" value="empty" /> <input
 													type="hidden" name="Re-MatKhau" value="empty" /> <input
 													type="hidden" name="IDTaiKhoan"
-													value="<%=taiKhoan.getID()%>" /> <input type="hidden"
-													name="Func" value="edit" />
+													value="<%=taiKhoan.getID()%>" />
+													<input type="hidden" name="Func" value="edit" />
 												<button type="submit" class="btn btn-primary">Lưu
 													thay đổi</button>
 												<a href="taikhoan.jsp" class="btn btn-default">Hủy</a>
@@ -263,6 +282,7 @@
 
 	<!-- Custom Theme JavaScript -->
 	<script src="dist/js/sb-admin-2.js"></script>
+	<script src="js/bootstrap-datepicker.js"></script>
 
 </body>
 

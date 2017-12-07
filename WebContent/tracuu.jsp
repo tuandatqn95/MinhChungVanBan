@@ -1,55 +1,65 @@
 <%@page import="model.TieuChi"%>
 <%@page import="model.TieuChuan"%>
+<%@page import="model.BoTieuChuan"%>
 <%@page import="dao.TieuChiDAO"%>
 <%@page import="dao.TieuChuanDAO"%>
+<%@page import="dao.BoTieuChuanDAO"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 <%@ include file="header.jsp"%>
+
+<%
+	if ((userPass == null) || !taiKhoanDAO.login(userEmail, userPass)) {
+		ArrayList<String> errors = new ArrayList<String>();
+		errors.add("Vui lòng đăng nhập để truy cập vào trang này!");
+		request.setAttribute("errors", errors);
+		request.getRequestDispatcher("403.jsp").forward(request, response);
+	}
+%>
 
 <div class="panel panel-primary">
 	<div class="panel-heading">
 		<h3 class="panel-title">Tra cứu minh chứng</h3>
 	</div>
 	<div class="panel-body">
-		<form action="" method="post" class="form-horizontal">
+		<form action="result.jsp" method="get" class="form-horizontal">
 			<div class="form-group">
-				<label class="control-label  col-md-3">Từ khóa: </label>
-				<div class="col-md-7">
-					<input type="email" name="email" placeholder="Từ khóa"
+				<label class="control-label col-md-2">Từ khóa: </label>
+				<div class="col-md-8">
+					<input type="text" name="keyword" placeholder="Tên minh chứng"
 						class="form-control">
 				</div>
-			</div>
-
-			<div class="form-group">
-				<label class="control-label  col-md-3">Tìm theo: </label>
-				<div class="col-md-7">
-					<select class="form-control">
-						<option>Tiêu chuẩn</option>
-						<option>Hoạt động</option>
-						<option>Nơi ban hành</option>
-					</select>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-md-offset-3 col-md-3">
-					<button type="submit" class="btn btn-primary ">Tìm kiếm</button>
-				</div>
+				<button type="submit" class="btn btn-primary"
+					class="col-md-offset-2 col-md-2">Tìm kiếm</button>
+				<input type="hidden" name="findBy" value="name" />
 			</div>
 		</form>
 	</div>
 </div>
 <%
+	BoTieuChuanDAO boTieuChuanDAO = new BoTieuChuanDAO();
 	TieuChuanDAO tieuChuanDAO = new TieuChuanDAO();
 	TieuChiDAO tieuChiDAO = new TieuChiDAO();
 %>
+
+
+<%
+	for (BoTieuChuan boTieuChuan : boTieuChuanDAO.getListBoTieuChuan()) {
+		List<TieuChuan> listTieuChuan = tieuChuanDAO.getListTieuChuanByBoTieuChuan(boTieuChuan.getID());
+		if (listTieuChuan.size() > 0) {
+%>
+
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<h3 class="panel-title">Bộ tiêu chuẩn</h3>
+		<h3 class="panel-title"><%=boTieuChuan.getTenBoTieuChuan()%></h3>
 	</div>
 	<div class="panel-body">
 		<div class="list-group list-group-root well">
 			<%
-				for (TieuChuan tieuChuan : tieuChuanDAO.getListTieuChuan()) {
+				for (TieuChuan tieuChuan : tieuChuanDAO.getListTieuChuanByBoTieuChuan(boTieuChuan.getID())) {
 			%>
 
 			<a href="#<%=tieuChuan.getMaTieuChuan()%>" class="list-group-item"
@@ -60,7 +70,8 @@
 				<%
 					for (TieuChi tieuChi : tieuChiDAO.getListTieuChiByTieuChuan(tieuChuan.getID())) {
 				%>
-				<a href="#" class="list-group-item"><%=tieuChi.getTenTieuChi()%></a>
+				<a href="result.jsp?findBy=tieuchi&maTieuChi=<%=tieuChi.getID()%>"
+					class="list-group-item"><%=tieuChi.getTenTieuChi()%></a>
 				<%
 					}
 				%>
@@ -71,6 +82,10 @@
 		</div>
 	</div>
 </div>
+<%
+	}
+}
+%>
 
 
 <%@ include file="sidebar.jsp"%>

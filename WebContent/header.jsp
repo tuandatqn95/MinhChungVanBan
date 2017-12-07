@@ -25,33 +25,6 @@
 <!-- Bootstrap Core JavaScript -->
 <script src="./js/bootstrap.min.js"></script>
 
-<script type="text/javascript">
-	//Change Icon of ListgroupItem
-	$(function() {
-
-		$('.list-group-item').on(
-				'click',
-				function() {
-					$('.glyphicon', this)
-							.toggleClass('glyphicon-chevron-right')
-							.toggleClass('glyphicon-chevron-down');
-				});
-
-	});
-
-	//Dropdown menu
-	$(function() {
-		$('.dropdown').on('mouseenter', function() {
-
-			$(this).addClass('open');
-		});
-		$('.dropdown').on('mouseleave', function() {
-
-			$(this).removeClass('open');
-		});
-	});
-</script>
-
 </head>
 
 <body>
@@ -88,60 +61,54 @@
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="./"><span
 							class="glyphicon glyphicon-home"></span> Trang chủ</a></li>
-					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"><span
-							class="glyphicon glyphicon-list-alt"></span> Hoạt động<span
-							class="caret"></span></a>
-						<ul class="dropdown-menu">
-							<li><a href="#">Học thuật</a></li>
-							<li><a href="#">Văn hóa - Nghệ thuật</a></li>
-							<li><a href="#">Hợp tác doanh nghiệp</a></li>
-						</ul></li>
 					<li class=""><a href="tracuu.jsp"><span
-							class="glyphicon glyphicon-search"></span> Minh chứng</a></li>
-
-					<li class=""><a href="vanban.jsp"><span
-							class="glyphicon glyphicon-file"></span> Văn bản</a></li>
+							class="glyphicon glyphicon-file"></span> Minh chứng</a></li>
 					<li class=""><a href="contact.jsp"><span
 							class="glyphicon glyphicon-envelope"></span> Liên Hệ</a></li>
 				</ul>
 
 				<div class="navbar-right">
 					<%
-						String userEmail = null;
 						TaiKhoanDAO taiKhoanDAO = new TaiKhoanDAO();
+						String userEmail = null, userPass = null;
 						TaiKhoan taiKhoan = null;
 						Cookie[] cookies = request.getCookies();
 						if (cookies != null) {
 							for (Cookie cookie : cookies) {
+								if (cookie.getName().equals("passUser")) {
+									userPass = cookie.getValue();
+								}
+
 								if (cookie.getName().equals("loginUser")) {
 									userEmail = cookie.getValue();
-									break;
 								}
 							}
 						}
-						if (userEmail != null) {
+						
+						if ((userPass != null) && (taiKhoanDAO.login(userEmail, userPass))) {
 							taiKhoan = taiKhoanDAO.GetTaiKhoanByEmail(userEmail);
 					%>
 					<a href="profile.jsp" class="nounderline"><img
-						src="<%=taiKhoan.getAnhDaiDien().equals("") ? "images/default-avatar.png"
-						: "uploads/" + taiKhoan.getAnhDaiDien()%>"
+						src="<%=taiKhoan.getAnhDaiDien() == null ? "images/default-avatar.png" : "uploads/" + taiKhoan.getAnhDaiDien()%>"
 						class="avatar img-thumbnail" width="32px">
 						<button class="btn btn-link navbar-btn">
 							<strong><%=userEmail%></strong>
-						</button> </a> <a href="admin" class="btn btn-link navbar-btn">AdminCP</a> <a
-						href="logout.jsp" class="btn btn-link navbar-btn">Đăng xuất</a>
+						</button> </a>
+					<%if((taiKhoan != null) && (taiKhoan.getIDLoaiTK() > 1)) {%><a href="admin"
+						class="btn btn-link navbar-btn">Manage</a>
+					<%}%>
+					<a href="logout.jsp" class="btn btn-link navbar-btn">Đăng xuất</a>
+
 					<%
 						} else {
 					%>
+
 					<a href="login.jsp" class="btn btn-info navbar-btn">Đăng nhập</a>
 					<%
 						}
 					%>
-
-
-
 				</div>
+
 			</div>
 			<!-- /.navbar-collapse -->
 		</div>

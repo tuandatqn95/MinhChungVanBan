@@ -15,10 +15,11 @@ public class TaiKhoanDAO {
 	public boolean login(String email, String matKhau) throws SQLException {
 		Connection conn = DBConnect.getConnection();
 
-		String sql = "SELECT * FROM taikhoan WHERE Email = ? AND MatKhau = ?";
+		String sql = "SELECT * FROM taikhoan WHERE Email = ? AND ((MatKhau = ?) OR (MatKhau = ?))";
 		PreparedStatement ps = conn.prepareCall(sql);
 		ps.setString(1, email);
 		ps.setString(2, getMD5(matKhau));
+		ps.setString(3, matKhau);
 		ResultSet rs = ps.executeQuery();
 
 		if (rs.next()) {
@@ -56,6 +57,33 @@ public class TaiKhoanDAO {
 		return list;
 	}
 
+	public ArrayList<TaiKhoan> getListTaiKhoanAreContact() throws SQLException {
+		Connection conn = DBConnect.getConnection();
+
+		String sql = "SELECT * FROM taikhoan WHERE IDLoaiTK = 2";
+		PreparedStatement ps = conn.prepareCall(sql);
+
+		ResultSet rs = ps.executeQuery();
+		ArrayList<TaiKhoan> list = new ArrayList<TaiKhoan>();
+		while (rs.next()) {
+			TaiKhoan tk = new TaiKhoan();
+			tk.setID(rs.getInt("ID"));
+			tk.setEmail(rs.getString("Email"));
+			tk.setMatKhau(rs.getString("MatKhau"));
+			tk.setHoTen(rs.getString("HoTen"));
+			tk.setIDLoaiTK(rs.getInt("IDLoaiTK"));
+			tk.setNu(rs.getInt("Nu") != 0);
+
+			tk.setNgaySinh(rs.getDate("NgaySinh"));
+			tk.setDiaChi(rs.getString("DiaChi"));
+			tk.setNoiCongTac(rs.getString("NoiCongTac"));
+			tk.setChucVu(rs.getString("ChucVu"));
+			tk.setSoDienThoai(rs.getString("SoDT"));
+			tk.setAnhDaiDien(rs.getString("AnhDaiDien"));
+			list.add(tk);
+		}
+		return list;
+	}
 	public void ThemTaiKhoan(String email, String matKhau, String hoTen, int idLoaiTk, Boolean nu, String ngaySinh,
 			String diaChi, String noiCongTac, String chucVu, String soDT, String anhDaiDien) throws SQLException {
 		Connection conn = DBConnect.getConnection();

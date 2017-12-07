@@ -13,7 +13,7 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
-<title>Quản lý tiêu chí</title>
+<title>Quản lý minh chứng</title>
 
 <!-- Bootstrap Core CSS -->
 <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -51,7 +51,7 @@
 		<div id="page-wrapper">
 			<div class="row">
 				<div class="col-lg-12">
-					<h1 class="page-header">Quản lý tiêu chí</h1>
+					<h1 class="page-header">Quản lý minh chứng</h1>
 				</div>
 				<!-- /.col-lg-12 -->
 			</div>
@@ -59,7 +59,7 @@
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="panel panel-default">
-						<div class="panel-heading">Danh sách tiêu chí</div>
+						<div class="panel-heading">Danh sách minh chứng</div>
 						<!-- /.panel-heading -->
 						<div class="panel-body">
 							<table width="100%"
@@ -88,7 +88,8 @@
 										<td class="text-center"><a
 											href="MinhChungServlet?command=edit&id=<%=minhChung.getID()%>">Sửa</a></td>
 										<td class="text-center"><a
-											href="MinhChungServlet?command=delete&id=<%=minhChung.getID()%>">Xóa</a></td>
+											href="MinhChungServlet?command=delete&id=<%=minhChung.getID()%>"
+											onclick="return confirm('Bạn có chắc chắn xóa minh chứng này không?')">Xóa</a></td>
 									</tr>
 									<%
 										}
@@ -128,7 +129,6 @@
 
 	<!-- Custom Theme JavaScript -->
 	<script src="dist/js/sb-admin-2.js"></script>
-
 </body>
 
 </html>

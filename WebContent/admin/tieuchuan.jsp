@@ -8,6 +8,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<%@include file="header.jsp"%>
+<%if (taikhoan.getIDLoaiTK() < 3) request.getRequestDispatcher("403.jsp").forward(request, response);%>
+
 <head>
 
 <meta charset="utf-8">
@@ -51,8 +54,6 @@
 <body>
 
 	<div id="wrapper">
-
-		<%@include file="header.jsp"%>
 
 		<div id="page-wrapper">
 			<div class="row">

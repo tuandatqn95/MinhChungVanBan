@@ -8,6 +8,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<%@include file="header.jsp"%>
+<%if (taikhoan.getIDLoaiTK() < 3) request.getRequestDispatcher("403.jsp").forward(request, response);%>
+
 <head>
 
 <meta charset="utf-8">
@@ -51,8 +54,6 @@
 
 	<div id="wrapper">
 
-		<%@include file="header.jsp"%>
-
 		<div id="page-wrapper">
 			<div class="row">
 				<div class="col-lg-12">
@@ -80,7 +81,7 @@
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="panel panel-default">
-						<div class="panel-heading">Sửa bộ tiêu chuẩn</div>
+						<div class="panel-heading">Thêm bộ tiêu chuẩn</div>
 						<div class="panel-body">
 							<div class="row">
 								<div class="col-lg-12">

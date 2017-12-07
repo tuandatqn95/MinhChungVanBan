@@ -41,14 +41,13 @@ public class TapTinServlet extends HttpServlet {
 					tapTinDAO.XoaTapTin(id);
 
 				} catch (SQLException e) {
-					errors.add("Đã có lỗi xảy ra!");
+					errors.add("Có lỗi xảy ra!");
 					e.printStackTrace();
 				}
 				break;
-
 			}
 		} else {
-			errors.add("Đã có lỗi xảy ra!");
+			errors.add("Có lỗi xảy ra!");
 		}
 
 		if (errors.size() > 0) {

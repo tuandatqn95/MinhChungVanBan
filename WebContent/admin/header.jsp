@@ -1,18 +1,31 @@
+<%@page import="model.TaiKhoan"%>
+<%@page import="dao.TaiKhoanDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
 <%
-	Cookie loginCookie = null;
+	TaiKhoanDAO taiKhoanDAO = new TaiKhoanDAO();
+	TaiKhoan taikhoan = null;
+	String userEmail = null, userPass = null;
 	Cookie[] cookies = request.getCookies();
 	if (cookies != null) {
 		for (Cookie cookie : cookies) {
+			if (cookie.getName().equals("passUser")) {
+				userPass = cookie.getValue();
+			}
+
 			if (cookie.getName().equals("loginUser")) {
-				loginCookie = cookie;
-				break;
+				userEmail = cookie.getValue();
 			}
 		}
 	}
-	if (loginCookie == null)
+
+	if ((userPass == null) || !taiKhoanDAO.login(userEmail, userPass))
+		request.getRequestDispatcher("403.jsp").forward(request, response);
+	else
+		taikhoan = taiKhoanDAO.GetTaiKhoanByEmail(userEmail);
+	
+	if (taikhoan.getIDLoaiTK() < 2)
 		request.getRequestDispatcher("403.jsp").forward(request, response);
 %>
 
@@ -26,7 +39,7 @@
 			<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span>
 			<span class="icon-bar"></span> <span class="icon-bar"></span>
 		</button>
-		<a class="navbar-brand" href="index.jsp">Admin Control Panel</a>
+		<a class="navbar-brand" href="index.jsp">Control Panel</a>
 	</div>
 	<!-- /.navbar-header -->
 
@@ -52,16 +65,18 @@
 			<ul class="nav" id="side-menu">
 				
 				<li><a href="index.jsp"><i class="fa fa-dashboard fa-fw"></i>
-						Bảng điều khiển</a></li>
-				<li><a href="botieuchuan.jsp"><i class="fa fa-table fa-fw"></i>
+						Trang chủ</a></li>
+				<%if(taikhoan.getIDLoaiTK() != 2) {%>
+					<li><a href="botieuchuan.jsp"><i class="fa fa-table fa-fw"></i>
 						Quản lý bộ tiêu chuẩn</a></li>
+						
 				<li><a href="tieuchuan.jsp"><i class="fa fa-table fa-fw"></i>
 						Quản lý tiêu chuẩn</a></li>
 
 				<li><a href="tieuchi.jsp"><i class="fa fa-table fa-fw"></i>
 						Quản lý tiêu chí</a></li>
-
-
+				<%}%>
+				
 				<li><a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>
 						Quản lý minh chứng<span class="fa arrow"></span></a>
 					<ul class="nav nav-second-level">
@@ -69,19 +84,22 @@
 						<li><a href="themminhchung.jsp">Thêm minh chứng</a></li>
 						<li><a href="noibanhanh.jsp">Quản lý nơi ban hành</a></li>
 					</ul></li>
-				<li><a href="#"><i class="fa fa-comments fa-fw"></i> Quản
+				
+				<%if(taikhoan.getIDLoaiTK() != 2) {%>
+					<li><a href="#"><i class="fa fa-comments fa-fw"></i> Quản
 						lý thông báo<span class="fa arrow"></span></a>
 					<ul class="nav nav-second-level">
 						<li><a href="thongbao.jsp">Danh sách thông báo</a></li>
 						<li><a href="themthongbao.jsp">Thêm thông báo</a></li>
 					</ul></li>
+					
 				<li><a href="#"><i class="fa fa-user fa-fw"></i> Quản lý
 						tài khoản<span class="fa arrow"></span></a>
 					<ul class="nav nav-second-level">
 						<li><a href="taikhoan.jsp">Danh sách tài khoản</a></li>
 						<li><a href="themtaikhoan.jsp">Thêm tài khoản</a></li>
 					</ul></li>
-
+				<%}%>
 			</ul>
 		</div>
 		<!-- /.sidebar-collapse -->

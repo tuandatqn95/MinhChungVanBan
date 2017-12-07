@@ -43,13 +43,13 @@ public class MinhChungServlet extends HttpServlet {
 			int id = Integer.parseInt(request.getParameter("id"));
 			switch (request.getParameter("command")) {
 			case "delete":
-//				try {
-//					taiKhoanDAO.XoaTaiKhoan(id);
-//					response.sendRedirect(url);
-//				} catch (SQLException e) {
-//					errors.add("Đã có lỗi xảy ra!");
-//					e.printStackTrace();
-//				}
+				try {
+					minhChungDAO.XoaMinhChung(id);
+					response.sendRedirect(url);
+				} catch (SQLException e) {
+					errors.add("Đã có lỗi xảy ra!");
+					e.printStackTrace();
+				}
 				break;
 			case "edit":
 				request.getRequestDispatcher("suaminhchung.jsp").forward(request, response);
@@ -135,7 +135,7 @@ public class MinhChungServlet extends HttpServlet {
 		if (!func.isEmpty()) {
 			if (maMinhChung.isEmpty() || tenMinhChung.isEmpty() || soHieu.isEmpty() || idTieuChi.isEmpty()
 					|| idNoiBanHanh.isEmpty() || ngayBanHanh.isEmpty()) {
-				errors.add("Vui lòng điền tất cả các trường bắt buộc");
+				errors.add("Vui lòng điền tất cả các trường bắt buộc!");
 			} else {
 				try {
 					if (errors.size() == 0) {

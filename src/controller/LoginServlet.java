@@ -46,12 +46,15 @@ public class LoginServlet extends HttpServlet {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			errors.add("Đã có lỗi xảy ra!");
+			errors.add("Có lỗi xảy ra!");
 		}
 		if (errors.size() == 0) {
 			Cookie loginCookie = new Cookie("loginUser", email);
-			loginCookie.setMaxAge(60 * 60);
+			loginCookie.setMaxAge(-1);
 			response.addCookie(loginCookie);
+			Cookie PassCookie = new Cookie("passUser", password);
+			PassCookie.setMaxAge(-1);
+			response.addCookie(PassCookie);
 			response.sendRedirect("index.jsp");
 		} else {
 			request.setAttribute("errors", errors);

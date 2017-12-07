@@ -43,7 +43,7 @@ public class TaiKhoanServlet extends HttpServlet {
 					taiKhoanDAO.XoaTaiKhoan(id);
 					response.sendRedirect(url);
 				} catch (SQLException e) {
-					errors.add("Đã có lỗi xảy ra!");
+					errors.add("Có lỗi xảy ra!");
 					e.printStackTrace();
 				}
 				break;
@@ -52,7 +52,7 @@ public class TaiKhoanServlet extends HttpServlet {
 				break;
 			}
 		} else {
-			errors.add("Đã có lỗi xảy ra!");
+			errors.add("Có lỗi xảy ra!");
 		}
 
 		if (errors.size() > 0) {
@@ -65,13 +65,12 @@ public class TaiKhoanServlet extends HttpServlet {
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		ArrayList<String> errors = new ArrayList<String>();
-		String url = "taikhoan.jsp";
 
 		String email = "";
 		String matKhau = "";
 		String reMatKhau = "";
 		String hoTen = "";
-		String idLoaiTaiKhoan = "";
+		Integer idLoaiTaiKhoan = 1;
 		String gioiTinh = "";
 		String ngaySinh = "";
 		String diaChi = "";
@@ -80,8 +79,9 @@ public class TaiKhoanServlet extends HttpServlet {
 		String soDienThoai = "";
 		String avatar = "";
 		FileItem avatarFile = null;
+		String idTaiKhoan = request.getParameter("id");
 		String func = "";
-		String idTaiKhoan = "";
+		String page = "";
 
 		DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
 		ServletFileUpload upload = new ServletFileUpload(fileItemFactory);
@@ -103,7 +103,7 @@ public class TaiKhoanServlet extends HttpServlet {
 						hoTen = item.getString("UTF-8");
 						break;
 					case "IDLoaiTaiKhoan":
-						idLoaiTaiKhoan = item.getString();
+						idLoaiTaiKhoan = Integer.valueOf(item.getString());
 						break;
 					case "GioiTinh":
 						gioiTinh = item.getString();
@@ -115,7 +115,7 @@ public class TaiKhoanServlet extends HttpServlet {
 						diaChi = item.getString("UTF-8");
 						break;
 					case "NoiCongTac":
-						noiCongTac = item.getString();
+						noiCongTac = item.getString("UTF-8");
 						break;
 					case "ChucVu":
 						chucVu = item.getString("UTF-8");
@@ -126,10 +126,12 @@ public class TaiKhoanServlet extends HttpServlet {
 					case "Func":
 						func = item.getString();
 						break;
+					case "Page":
+						page = item.getString();
+						break;
 					case "IDTaiKhoan":
 						idTaiKhoan = item.getString();
 						break;
-
 					}
 				} else {
 					String nameimg = item.getName();
@@ -142,21 +144,20 @@ public class TaiKhoanServlet extends HttpServlet {
 			}
 
 		} catch (FileUploadException e) {
-			errors.add("Đã có lỗi xảy ra!");
+			errors.add("Có lỗi xảy ra!");
 			e.printStackTrace();
 		}
 
-		if (!func.isEmpty()) {
+		if (func != "") {
 			if (email.isEmpty() || matKhau.isEmpty() || reMatKhau.isEmpty() || hoTen.isEmpty()
-					|| idLoaiTaiKhoan.isEmpty() || gioiTinh.isEmpty() || ngaySinh.isEmpty() || diaChi.isEmpty()
+					|| gioiTinh.isEmpty() || ngaySinh.isEmpty() || diaChi.isEmpty()
 					|| noiCongTac.isEmpty() || chucVu.isEmpty() || soDienThoai.isEmpty()) {
-				errors.add("Vui lòng điền tất cả các trường bắt buộc");
+				errors.add("Vui lòng nhập đủ thông tin!");
 			} else {
 				if (!matKhau.equals(reMatKhau)) {
-					errors.add("Mật khẩu không giống nhau");
+					errors.add("Mật khẩu không trùng khớp");
 				} else {
 					try {
-
 						if (avatarFile != null) {
 							String nameimg = avatarFile.getName();
 							String dirUrl = request.getServletContext().getRealPath("") + File.separator + "uploads";
@@ -177,34 +178,57 @@ public class TaiKhoanServlet extends HttpServlet {
 						if (errors.size() == 0) {
 							switch (func) {
 							case "add":
-								taiKhoanDAO.ThemTaiKhoan(email, matKhau, hoTen, Integer.parseInt(idLoaiTaiKhoan),
+								taiKhoanDAO.ThemTaiKhoan(email, matKhau, hoTen, idLoaiTaiKhoan,
 										gioiTinh.equals("Nu"), ngaySinh, diaChi, noiCongTac, chucVu, soDienThoai,
 										avatar);
 								break;
 							case "edit":
 
 								taiKhoanDAO.SuaTaiKhoan(Integer.parseInt(idTaiKhoan), email, hoTen,
-										Integer.parseInt(idLoaiTaiKhoan), gioiTinh.equals("Nu"), ngaySinh, diaChi,
+										idLoaiTaiKhoan, gioiTinh.equals("Nu"), ngaySinh, diaChi,
 										noiCongTac, chucVu, soDienThoai, avatar);
 								break;
 							}
 						}
 
 					} catch (NumberFormatException | SQLException e) {
-						errors.add("Đã có lỗi xảy ra!");
+						errors.add("Có lỗi xảy ra!");
 						e.printStackTrace();
 					}
 				}
 			}
 
 		} else {
-			errors.add("Đã có lỗi xảy ra!");
+			errors.add("Có lỗi xảy ra!");
 		}
+		
+		String urlRedirect = null, urlFeedback = null;
+		switch (page) {
+		case "capnhattaikhoan":
+			urlRedirect = "\\MinhChungVanban\\profile.jsp";
+			urlFeedback = "capnhattaikhoan.jsp";
+			break;
+		case "":
+			urlRedirect = "taikhoan.jsp";
+			switch (func) {
+			case "add":
+				urlFeedback = "themtaikhoan.jsp";
+				break;
+			case "edit":
+				urlFeedback = "suataikhoan.jsp?id=" + idTaiKhoan;
+				break;
+			}
+			break;
+		}
+		
 		if (errors.size() == 0) {
-			response.sendRedirect("taikhoan.jsp");
+			response.sendRedirect(urlRedirect);
 		} else {
 			request.setAttribute("errors", errors);
-			request.getRequestDispatcher(url).forward(request, response);
+			if(urlFeedback == "capnhattaikhoan.jsp")
+				response.sendRedirect("/MinhChungVanban/capnhattaikhoan.jsp");
+			else
+				request.getRequestDispatcher(urlFeedback).forward(request, response);
 		}
 
 	}

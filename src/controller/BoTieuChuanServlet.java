@@ -36,7 +36,7 @@ public class BoTieuChuanServlet extends HttpServlet {
 					boTieuChuanDAO.XoaBoTieuChuan(id);
 					response.sendRedirect(url);
 				} catch (SQLException e) {
-					errors.add("Đã có lỗi xảy ra!");
+					errors.add("Có lỗi xảy ra!");
 					e.printStackTrace();
 				}
 				break;
@@ -45,7 +45,7 @@ public class BoTieuChuanServlet extends HttpServlet {
 				break;
 			}
 		} else {
-			errors.add("Đã có lỗi xảy ra!");
+			errors.add("Có lỗi xảy ra!");
 		}
 
 		if (errors.size() > 0) {
@@ -75,15 +75,15 @@ public class BoTieuChuanServlet extends HttpServlet {
 						break;
 					}
 				} catch (SQLException e) {
-					errors.add("Đã có lỗi xảy ra!");
+					errors.add("Có lỗi xảy ra!");
 					e.printStackTrace();
 				}
 
 			} else {
-				errors.add("Vui lòng điền tất cả các trường bắt buộc!");
+				errors.add("Vui lòng điền đầy đủ thông tin các trường bắt buộc!");
 			}
 		} else {
-			errors.add("Đã có lỗi xảy ra!");
+			errors.add("Có lỗi xảy ra!");
 		}
 
 		if (errors.size() == 0) {

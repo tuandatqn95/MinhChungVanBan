@@ -7,7 +7,7 @@
 <%@ include file="header.jsp"%>
 
 <%
-	if (userEmail == null) {
+	if ((userPass == null) || !taiKhoanDAO.login(userEmail, userPass)) {
 		ArrayList<String> errors = new ArrayList<String>();
 		errors.add("Vui lòng đăng nhập để truy cập vào trang này!");
 		request.setAttribute("errors", errors);
@@ -18,22 +18,18 @@
 <div class="panel panel-primary">
 
 	<div class="panel-heading">
-		<h3 class="panel-title">Thông tin liên hệ</h3>
+		<h3 class="panel-title">Thông tin Tài khoản</h3>
 	</div>
 	<div class="panel-body">
 
-		<div class="col-md-3">
+		<div class="col-md-4">
 
 			<img
-				src="<%=taiKhoan.getAnhDaiDien().equals("") ? "images/default-avatar.png" : "uploads/"+taiKhoan.getAnhDaiDien()%>"
+				src="<%=taiKhoan.getAnhDaiDien() == null ? "images/default-avatar.png" : "uploads/"+taiKhoan.getAnhDaiDien()%>"
 				class="img-thumbnail">
 
-			<div class="text-center"
-				style="margin-top: 10px; margin-bottom: 10px;">
-				<a href="#" class="btn btn-info">Thay đổi</a>
-			</div>
 		</div>
-		<div class="col-md-9">
+		<div class="col-md-8">
 			<table class="table table-striped">
 
 				<tbody>
@@ -42,7 +38,7 @@
 					%>
 					<tr>
 
-						<td>Ho và tên:</td>
+						<td>Họ và tên:</td>
 						<td><%=taiKhoan.getHoTen()%></td>
 					</tr>
 					<tr>
@@ -76,7 +72,7 @@
 
 				</tbody>
 			</table>
-			<a class="btn btn-primary center-block">Cập nhật</a>
+			<a href="capnhattaikhoan.jsp" class="btn btn-primary center-block">Cập nhật</a>
 		</div>
 	</div>
 </div>

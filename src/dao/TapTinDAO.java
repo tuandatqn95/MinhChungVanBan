@@ -44,6 +44,22 @@ public class TapTinDAO {
 		}
 		return list;
 	}
+	
+	public TapTin GetTapTinByMinhChung(int idMinhChung) throws SQLException {
+		Connection conn = DBConnect.getConnection();
+		String sql = "SELECT * FROM taptin WHERE IDMinhChung = ?";
+		PreparedStatement ps = conn.prepareCall(sql);
+		ps.setInt(1, idMinhChung);
+		ResultSet rs = ps.executeQuery();
+		TapTin tt = new TapTin();
+		while (rs.next()) {
+			tt.setID(rs.getInt("ID"));
+			tt.setIDMinhChung(rs.getInt("IDMinhChung"));
+			tt.setFilePath(rs.getString("FilePath"));
+			tt.setFileType(rs.getString("FileType"));
+		}
+		return tt;
+	}
 
 	public TapTin GetTapTinByID(int id) throws SQLException {
 		Connection conn = DBConnect.getConnection();

@@ -6,7 +6,7 @@
 <div class="main-slider">
 	<div id="myCarousel" class="carousel slide" data-ride="carousel">
 		<!-- Indicators -->
-		<ol class="carousel-indicators">
+		<ol class="carousel-indicators" style="margin-bottom: 5px">
 			<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
 			<li data-target="#myCarousel" data-slide-to="1"></li>
 			<li data-target="#myCarousel" data-slide-to="2"></li>
@@ -15,26 +15,20 @@
 		<!-- Wrapper for slides -->
 		<div class="carousel-inner">
 			<div class="item active">
-				<img src="images/slideshow1.jpg" alt="Los Angeles">
+				<img src="images/slideshow1.jpg" alt="slideshow1">
 				<div class="carousel-caption">
-					<h3>Los Angeles</h3>
-					<p>LA is always so much fun!</p>
 				</div>
 			</div>
 
 			<div class="item">
-				<img src="images/slideshow2.jpg" alt="Chicago">
+				<img src="images/slideshow2.jpg" alt="slideshow2">
 				<div class="carousel-caption">
-					<h3>Chicago</h3>
-					<p>Thank you, Chicago!</p>
 				</div>
 			</div>
 
 			<div class="item">
-				<img src="images/slideshow3.jpg" alt="New York">
-				<div class="carousel-caption">
-					<h3>New York</h3>
-					<p>We love the Big Apple!</p>
+				<img src="images/slideshow3.jpg" alt="slideshow3">
+				<div class="carousel-caption">	
 				</div>
 			</div>
 		</div>

@@ -26,7 +26,7 @@ public class MinhChungDAO {
 			mc.setIDTieuChi(rs.getInt("IDTieuChi"));
 			mc.setMoTa(rs.getString("MoTa"));
 			mc.setSoHieu(rs.getString("SoHieu"));
-
+			mc.setNgayBanhanh(rs.getDate("NgayBanHanh"));
 			mc.setNoiBanHanh(rs.getInt("IDNBH"));
 			list.add(mc);
 		}
@@ -49,11 +49,61 @@ public class MinhChungDAO {
 			mc.setIDTieuChi(rs.getInt("IDTieuChi"));
 			mc.setMoTa(rs.getString("MoTa"));
 			mc.setSoHieu(rs.getString("SoHieu"));
+			mc.setNgayBanhanh(rs.getDate("NgayBanHanh"));
 			mc.setNoiBanHanh(rs.getInt("IDNBH"));
-
 		}
 
 		return mc;
+	}
+	
+	public ArrayList<MinhChung> getListMinhChungByName(String name) throws SQLException {
+		Connection conn = DBConnect.getConnection();
+		String sql = "SELECT * FROM minhchungvanban.minhchung WHERE TenMC LIKE concat('%',?,'%')";
+		PreparedStatement ps = conn.prepareCall(sql);
+		ps.setString(1, name);
+
+		ArrayList<MinhChung> list = new ArrayList<MinhChung>();
+
+		ResultSet rs = ps.executeQuery();
+		while (rs.next()) {
+			MinhChung mc = new MinhChung();
+			mc.setID(rs.getInt("ID"));
+			mc.setMaMinhChung(rs.getString("MaMC"));
+			mc.setTenMinhChung(rs.getString("TenMC"));
+			mc.setIDTieuChi(rs.getInt("IDTieuChi"));
+			mc.setMoTa(rs.getString("MoTa"));
+			mc.setSoHieu(rs.getString("SoHieu"));
+			mc.setNgayBanhanh(rs.getDate("NgayBanHanh"));
+			mc.setNoiBanHanh(rs.getInt("IDNBH"));
+			list.add(mc);
+		}
+
+		return list;
+	}
+	
+	public ArrayList<MinhChung> getListMinhChungByMaTieuChi(int maTieuChi) throws SQLException {
+		Connection conn = DBConnect.getConnection();
+		String sql = "SELECT * FROM minhchung WHERE IDTieuChi = ?";
+		PreparedStatement ps = conn.prepareCall(sql);
+		ps.setInt(1, maTieuChi);
+
+		ArrayList<MinhChung> list = new ArrayList<MinhChung>();
+
+		ResultSet rs = ps.executeQuery();
+		while (rs.next()) {
+			MinhChung mc = new MinhChung();
+			mc.setID(rs.getInt("ID"));
+			mc.setMaMinhChung(rs.getString("MaMC"));
+			mc.setTenMinhChung(rs.getString("TenMC"));
+			mc.setIDTieuChi(rs.getInt("IDTieuChi"));
+			mc.setMoTa(rs.getString("MoTa"));
+			mc.setSoHieu(rs.getString("SoHieu"));
+			mc.setNgayBanhanh(rs.getDate("NgayBanHanh"));
+			mc.setNoiBanHanh(rs.getInt("IDNBH"));
+			list.add(mc);
+		}
+
+		return list;
 	}
 
 	public void ThemMinhChung(int idTieuChi, String maMinhChung, String tenMinhChung, String moTa, String soHieu,
@@ -87,6 +137,20 @@ public class MinhChungDAO {
 		ps.setString(6, ngayBanHanh);
 		ps.setInt(7, idNoiBanHanh);
 		ps.setInt(8, id);
+		ps.executeUpdate();
+		conn.close();
+	}
+	
+	public void XoaMinhChung(int id) throws SQLException {
+		Connection conn = DBConnect.getConnection();
+		String sql = "DELETE FROM taptin WHERE IDMinhChung = ?";
+		PreparedStatement ps = conn.prepareCall(sql);
+		ps.setInt(1, id);
+		ps.executeUpdate();
+		
+		String sql1 = "DELETE FROM minhchung WHERE ID = ?";
+		ps = conn.prepareCall(sql1);
+		ps.setInt(1, id);
 		ps.executeUpdate();
 		conn.close();
 	}

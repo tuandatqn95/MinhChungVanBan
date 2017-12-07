@@ -10,6 +10,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<%@include file="header.jsp"%>
+<%if (taikhoan.getIDLoaiTK() < 3) request.getRequestDispatcher("403.jsp").forward(request, response);%>
+
 <head>
 
 <meta charset="utf-8">
@@ -47,6 +50,7 @@
 		var x_timer;
 		$("#BoTieuChuan").change(function(e) {
 			clearTimeout(x_timer);
+			$("#optBTC").remove();
 			var idBoTieuChuan = $("option:selected", this).val();
 			x_timer = setTimeout(function() {
 				update_data(idBoTieuChuan);
@@ -73,9 +77,7 @@
 <body>
 
 	<div id="wrapper">
-
-		<%@include file="header.jsp"%>
-
+	
 		<div id="page-wrapper">
 			<div class="row">
 				<div class="col-lg-12">
@@ -114,7 +116,7 @@
 												tiêu chí:</label>
 											<div class="col-sm-9">
 												<input type="text" name="MaTieuChi" class="form-control"
-													placeholder="Mã tiêu chuẩn...">
+													placeholder="Mã tiêu chí...">
 											</div>
 										</div>
 										<div class="form-group">
@@ -122,7 +124,7 @@
 												tiêu chí:</label>
 											<div class="col-sm-9">
 												<input type="text" name="TenTieuChi" class="form-control"
-													placeholder="Tên tiêu chuẩn...">
+													placeholder="Tên tiêu chí...">
 											</div>
 										</div>
 										<div class="form-group">
@@ -131,6 +133,7 @@
 											<div class="col-sm-9">
 												<select class="form-control" id="BoTieuChuan"
 													name="IDBoTieuChuan">
+													<option :value="null" id="optBTC">Vui lòng chọn bộ tiêu chuẩn</option>
 													<%
 														for (BoTieuChuan btc : boTieuChuanDAO.getListBoTieuChuan()) {
 													%>

@@ -46,9 +46,14 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Dashboard</h1>
+                    <h1 class="page-header">Trang chủ</h1>
                 </div>
                 <!-- /.col-lg-12 -->
+            </div>
+            
+            <div class="alert alert-info" style="text-align: center; color: blue;">
+	                <h4>Thời gian hiện tại</h4>
+	                <h4 id="clock"></4>
             </div>
            
         </div>
@@ -75,5 +80,13 @@
     <script src="dist/js/sb-admin-2.js"></script>
 
 </body>
-
+	
+<script>
+  setInterval(displayTime, 1000);
+  function displayTime(){
+     var d = new Date();
+     document.getElementById("clock").innerHTML = d.toLocaleString();
+  }
+</script>	
+	
 </html>

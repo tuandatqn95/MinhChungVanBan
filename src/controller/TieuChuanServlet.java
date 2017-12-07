@@ -36,7 +36,7 @@ public class TieuChuanServlet extends HttpServlet {
 					tieuChuanDAO.XoaTieuChuan(id);
 					response.sendRedirect(url);
 				} catch (SQLException e) {
-					errors.add("Đã có lỗi xảy ra!");
+					errors.add("Có lỗi xảy ra!");
 					e.printStackTrace();
 				}
 				break;
@@ -45,7 +45,7 @@ public class TieuChuanServlet extends HttpServlet {
 				break;
 			}
 		} else {
-			errors.add("Đã có lỗi xảy ra!");
+			errors.add("Có lỗi xảy ra!");
 		}
 
 		if (errors.size() > 0) {
@@ -65,7 +65,7 @@ public class TieuChuanServlet extends HttpServlet {
 			String tenTieuChuan = request.getParameter("TenTC");
 			int idBoTieuChuan = Integer.parseInt(request.getParameter("IDBoTieuChuan"));
 			if (maTieuChuan == "" || tenTieuChuan == "") {
-				errors.add("Vui lòng điền tất cả các trường còn trống");
+				errors.add("Vui lòng điền đủ thông tin!");
 			} else {
 				try {
 					switch (request.getParameter("Func")) {
@@ -78,12 +78,12 @@ public class TieuChuanServlet extends HttpServlet {
 						break;
 					}
 				} catch (SQLException e) {
-					errors.add("Đã có lỗi xảy ra!");
+					errors.add("Có lỗi xảy ra!");
 					e.printStackTrace();
 				}
 			}
 		} else {
-			errors.add("Đã có lỗi xảy ra!");
+			errors.add("Có lỗi xảy ra!");
 		}
 
 		if (errors.size() == 0) {

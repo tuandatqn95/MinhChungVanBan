@@ -12,7 +12,7 @@ public class DBConnect {
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/minhchungvanban?characterEncoding=UTF-8", "root", "");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/minhchungvanban?characterEncoding=UTF-8", "root", "1234");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
